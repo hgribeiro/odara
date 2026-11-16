@@ -243,6 +243,15 @@ const CORES_3D = {
     "Ninho com Morango": "#f4c6cc", "Ninho com Nutella": "#7b4a30", "Ninho com Abacaxi": "#f3df86",
   },
   recheioPadrao: "#f3e6d6",
+  // pedaços visíveis no corte do recheio
+  pedacos: {
+    Morango: "#c8303c", "Ninho com Morango": "#d23a48", "Ninho com Abacaxi": "#e8b62e", Crocante: "#8a5428",
+    "Romeu e Julieta": "#b02c36", Beijinho: "#ffffff", "Bem casado": "#3f231a",
+  },
+  // recheios com brilho (ganache, Nutella, geleia)
+  brilho: ["Chocolate", "Chocolate Preto", "Ninho com Nutella", "Morango", "Ninho com Morango"],
+  // recheios que ganham calda de chocolate escorrendo
+  calda: { Chocolate: "#3a1f16", "Chocolate Preto": "#2f1811", "Ninho com Nutella": "#4a2a1a", "Bem casado": "#3a1f16" },
   // decoração do topo de acordo com o recheio
   topos: {
     Morango: { tipo: "morango" }, "Ninho com Morango": { tipo: "morango" }, "Ninho com Abacaxi": { tipo: "abacaxi" },

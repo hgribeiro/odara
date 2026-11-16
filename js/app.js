@@ -220,10 +220,15 @@
       const kg = item.tipo === "bolo" ? TAMANHOS_BOLO.find((t) => t.rotulo === sel.tamanho)?.kg ?? 1.5 : item.bolo3d.kg;
       const rech = sel.recheio || [];
       const r1 = rech[0], r2 = rech[1] || rech[0];
+      const calda = C.calda[r1] || C.calda[r2] || null;
       bolo = {
         kg,
         massa: C.massas[sel.massa] || C.massaPadrao,
         recheios: [C.recheios[r1] || C.recheioPadrao, C.recheios[r2] || C.recheioPadrao],
+        pedacos: [C.pedacos[r1] || "", C.pedacos[r2] || ""],
+        brilho: [C.brilho.includes(r1), C.brilho.includes(r2)],
+        calda,
+        decoracao: calda ? "#f6e6dc" : "#f2c4c3",
         topo: C.topos[r2] || C.topos[r1] || { tipo: "bolinha", cor: "#f1c9c6" },
       };
     }

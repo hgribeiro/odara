@@ -10,7 +10,9 @@ Visão do cliente apenas (sem login): o cliente monta o pedido no site e ele é 
 - **Montagem de kits e bolos**: escolha de massa, recheios, sabores de salgados/brigadeiros e tema,
   respeitando os limites do cardápio (mín. 10 un. por sabor, 2 recheios, etc.).
 - **Construtor 3D** (three.js): ao montar bolos e kits, o cliente vê o bolo em 3D com uma fatia cortada
-  mostrando as camadas de massa e recheio, a decoração e os doces/salgados escolhidos ao redor.
+  mostrando as camadas de massa (miolo poroso) e recheio (com pedaços de fruta/crocante), cobertura de
+  chantininho, pitangas, calda de chocolate escorrendo (recheios de chocolate/Nutella), luz de estúdio
+  e sombras suaves, além dos doces/salgados escolhidos ao redor.
   Arraste para girar; botão "Ver por dentro / Fechar a fatia". No celular o 3D fica fixo no topo enquanto
   a pessoa escolhe os sabores. Se o aparelho não suportar WebGL, aparece uma ilustração 2D.
 - **Bolo personalizado** com cálculo automático do preço (tamanho + acréscimo de Red Velvet/recheio especial).
@@ -52,6 +54,6 @@ css/styles.css      estilos (paleta do cardápio: rosé, cacau e dourado)
 js/data.js          dados da loja e do cardápio
 js/app.js           carrinho, montagem de itens, checkout e WhatsApp
 js/bolo3d.js        visualizador 3D do bolo/kits (carregado só ao abrir o construtor)
-js/vendor/          three.js r160 (MIT) incluído localmente
+js/vendor/          three.js r160 + RoomEnvironment (MIT) incluídos localmente
 assets/img/         fotos
 ```
