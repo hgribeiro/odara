@@ -137,18 +137,19 @@
     return `<article class="kit">
       ${item.destaque ? `<span class="kit__tag">${esc(item.destaque)}</span>` : ""}
       <img class="kit__foto" src="${item.img}" alt="" loading="lazy" />
+      <span class="selo-3d" title="Monte e veja em 3D">3D</span>
       <div class="kit__corpo">
         <div class="kit__nome"><h4>${esc(item.nome)}</h4><span class="kit__preco">${brl(item.preco)}</span></div>
         <p class="kit__pessoas">${esc(item.pessoas || "Personalizado no tema")}</p>
         <ul class="kit__inclui">${item.inclui.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
-        <button class="btn btn--primario btn--bloco" type="button" data-configurar="${item.id}">Montar meu ${esc(item.nome.toLowerCase())}</button>
+        <button class="btn btn--primario btn--bloco" type="button" data-configurar="${item.id}">Montar em 3D</button>
       </div>
     </article>`;
   }
 
   function cardBolo(item) {
     return `<div class="bolo-card">
-      <div class="bolo-card__arte">${ILUS.bolo()}</div>
+      <div class="bolo-card__arte">${ILUS.bolo()}<span class="selo-3d">Veja as camadas em 3D</span></div>
       <div class="bolo-card__corpo">
         <h4>${esc(item.nome)}</h4>
         <p class="produto__desc">${esc(item.descricao)}</p>
@@ -156,7 +157,7 @@
           ${TAMANHOS_BOLO.map((t) => `<tr><td>${esc(t.rotulo)}</td><td>${brl(t.preco)}</td></tr>`).join("")}
         </tbody></table>
         <p class="dica">Massa Red Velvet e recheios especiais (Romeu e Julieta, Crocante, Ninho com Morango, Ninho com Nutella, Ninho com Abacaxi): acréscimo de R$ 10 por kg.</p>
-        <button class="btn btn--primario btn--bloco" type="button" data-configurar="${item.id}">Montar meu bolo</button>
+        <button class="btn btn--primario btn--bloco" type="button" data-configurar="${item.id}">Montar meu bolo em 3D</button>
       </div>
     </div>`;
   }
@@ -187,8 +188,10 @@
 
   /* ---------- Modal ---------- */
   let ultimoFoco = null;
-  function abrirModal(html) {
+  function abrirModal(html, largo = false) {
     ultimoFoco = document.activeElement;
+    destruir3d();
+    $("#modal .modal__caixa").classList.toggle("modal__caixa--largo", largo);
     $("#modalConteudo").innerHTML = html;
     $("#modal").hidden = false;
     document.body.classList.add("travado");
@@ -196,8 +199,96 @@
   }
   function fecharModal() {
     $("#modal").hidden = true;
+    destruir3d();
     if (!algumaGavetaAberta()) document.body.classList.remove("travado");
     ultimoFoco?.focus?.();
+  }
+
+  /* ---------- Visualizador 3D (carregado sob demanda) ---------- */
+  let modulo3d = null;
+  let visual3d = null;
+  const carregar3d = () => (modulo3d ||= import(new URL("js/bolo3d.js", document.baseURI).href));
+  function destruir3d() {
+    if (visual3d) { visual3d.destruir(); visual3d = null; }
+  }
+  const tem3d = (item) => item.tipo === "bolo" || item.tipo === "kit";
+
+  function spec3d(item, sel) {
+    const C = CORES_3D;
+    let bolo = null;
+    if (item.tipo === "bolo" || item.bolo3d) {
+      const kg = item.tipo === "bolo" ? TAMANHOS_BOLO.find((t) => t.rotulo === sel.tamanho)?.kg ?? 1.5 : item.bolo3d.kg;
+      const rech = sel.recheio || [];
+      const r1 = rech[0], r2 = rech[1] || rech[0];
+      bolo = {
+        kg,
+        massa: C.massas[sel.massa] || C.massaPadrao,
+        recheios: [C.recheios[r1] || C.recheioPadrao, C.recheios[r2] || C.recheioPadrao],
+        topo: C.topos[r2] || C.topos[r1] || { tipo: "bolinha", cor: "#f1c9c6" },
+      };
+    }
+    return {
+      bolo,
+      doces: (sel.brigadeiros || sel.doces || []).map((n) => C.doces[n]).filter(Boolean),
+      salgados: (sel.salgados || []).map((n) => C.salgados[n]).filter(Boolean),
+      extras: (item.extras3d || []).map((n) => C.extras[n]),
+    };
+  }
+
+  function legenda3d(item, sel) {
+    const C = CORES_3D;
+    const itens = [];
+    const ponto = (cor, rotulo, valor, vazio) => `<li class="${vazio ? "legenda__vazio" : ""}"><span class="legenda__cor" style="background:${cor}"></span><span><small>${esc(rotulo)}</small>${esc(valor)}</span></li>`;
+    if (item.tipo === "bolo" || item.bolo3d) {
+      const rech = sel.recheio || [];
+      itens.push(ponto(C.massas[sel.massa] || C.massaPadrao, "Massa", sel.massa || "escolha a massa", !sel.massa));
+      itens.push(ponto(C.recheios[rech[0]] || C.recheioPadrao, rech.length > 1 ? "Recheio 1" : "Recheio", rech[0] || "escolha o recheio", !rech[0]));
+      if (rech[1]) itens.push(ponto(C.recheios[rech[1]], "Recheio 2", rech[1]));
+      else if (item.tipo === "bolo") itens.push(ponto(C.recheioPadrao, "Recheio 2", "escolha o 2º recheio", true));
+    }
+    (sel.brigadeiros || sel.doces || []).forEach((n) => itens.push(ponto(C.doces[n]?.cor || "#ccc", "Doce", n)));
+    (sel.salgados || []).forEach((n) => itens.push(ponto(C.salgados[n]?.cor || "#ccc", "Salgado", n)));
+    return itens.join("");
+  }
+
+  function painel3dHtml(item) {
+    const temFatia = item.tipo === "bolo" || item.bolo3d;
+    return `<div class="config3d__visual">
+      <div class="visual3d" id="visual3d">
+        <div class="visual3d__carregando"><span class="visual3d__spinner"></span>Montando em 3D…</div>
+        <span class="visual3d__selo">3D</span>
+      </div>
+      <div class="visual3d__barra">
+        <span class="visual3d__dica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9l-4 3 4 3M17 9l4 3-4 3M3 12h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Arraste para girar</span>
+        ${temFatia ? `<button type="button" class="visual3d__btn" id="btnFatia" aria-pressed="true">Fechar a fatia</button>` : ""}
+      </div>
+      <ul class="legenda" id="legenda3d" aria-live="polite"></ul>
+    </div>`;
+  }
+
+  function iniciar3d(item, obterSelecao) {
+    const caixa = $("#visual3d");
+    carregar3d()
+      .then((mod) => {
+        if (!caixa.isConnected) return;
+        visual3d = mod.criarVisualizador(caixa);
+        $(".visual3d__carregando", caixa)?.remove();
+        visual3d.atualizar(spec3d(item, obterSelecao()));
+      })
+      .catch((erro) => {
+        console.warn("3D indisponível:", erro);
+        if (!caixa.isConnected) return;
+        caixa.classList.add("visual3d--sem3d");
+        caixa.innerHTML = ILUS.bolo();
+        $("#btnFatia")?.remove();
+        $(".visual3d__dica")?.remove();
+      });
+    $("#btnFatia")?.addEventListener("click", (e) => {
+      if (!visual3d) return;
+      const aberta = visual3d.alternarFatia();
+      e.currentTarget.textContent = aberta ? "Fechar a fatia" : "Ver por dentro";
+      e.currentTarget.setAttribute("aria-pressed", String(aberta));
+    });
   }
 
   /* Configurador de item (kits, bolo e unitários com opções) */
@@ -209,22 +300,25 @@
     const sub = item.tipo === "kit" ? item.inclui.join(" · ") : item.tipo === "bolo" ? "Escolha tamanho, massa e 2 recheios" : `${brl(item.preco)} a unidade · mínimo ${item.min} un.`;
 
     const campos = item.campos.map((c, idx) => campoHtml(c, idx)).join("");
+    const com3d = tem3d(item);
     abrirModal(`
-      <form id="formConfig" novalidate>
+      <form id="formConfig" class="${com3d ? "config3d" : ""}" novalidate>
         <div class="modal__cabeca">
           ${midia(item, "", "produto__ilus")}
           <div><h2 id="modalTitulo">${esc(nomeLinha(item))}</h2><p>${esc(sub)}</p></div>
         </div>
+        ${com3d ? `<div class="config3d__grade">${painel3dHtml(item)}` : ""}
         <div class="modal__corpo">
           ${campos}
           <fieldset><legend>${ehUnidade ? "Quantidade (unidades)" : "Quantidade"}</legend>${stepperHtml("modal:" + item.id, q, "Quantidade")}</fieldset>
           ${cat.id === "mesversario" ? `<p class="nota">${ICONE_INFO}<span>${esc(cat.nota)}</span></p>` : ""}
         </div>
+        ${com3d ? "</div>" : ""}
         <div class="modal__rodape">
           <div class="modal__total"><span>Total do item</span><strong id="configTotal">—</strong></div>
           <button class="btn btn--primario" type="submit">Adicionar ao carrinho</button>
         </div>
-      </form>`);
+      </form>`, com3d);
 
     const form = $("#formConfig");
     const lerSelecao = () => {
@@ -245,6 +339,10 @@
         $$(`input[name="${c.id}"]`, form).forEach((i) => { i.disabled = !i.checked && marcados >= c.max; });
       });
       $("#configTotal").textContent = brl(precoItem(item, sel) * lerQtd());
+      if (com3d) {
+        $("#legenda3d").innerHTML = legenda3d(item, sel);
+        visual3d?.atualizar(spec3d(item, sel));
+      }
     };
     const limparErro = (e) => {
       const bloco = e.target.closest("fieldset, .campo");
@@ -255,6 +353,7 @@
     form.addEventListener("input", (e) => { limparErro(e); atualizar(); });
     form.addEventListener("click", (e) => { if (e.target.closest("[data-delta]")) setTimeout(atualizar); });
     atualizar();
+    if (com3d) iniciar3d(item, lerSelecao);
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();

@@ -78,11 +78,11 @@ const CATEGORIAS = [
     resumo: "Bolo + salgados + brigadeiros, prontos para a festa.",
     nota: "Você escolhe a massa, o recheio, os salgados e os brigadeiros. Mínimo de 10 unidades por sabor.",
     itens: [
-      { id: "kit1", tipo: "kit", nome: "Kit 1", pessoas: "Ideal para até 8 pessoas", preco: 90, img: GAL + "romeu-confete-sensacao.jpg", inclui: ["Bolo PP (6 a 8 fatias)", "10 salgados", "10 brigadeiros"], campos: camposKitFesta(10, 10), temBolo: true },
-      { id: "kit2", tipo: "kit", nome: "Kit 2", pessoas: "Ideal para 10 pessoas", preco: 130, img: GAL + "doce-de-leite-grid.jpg", inclui: ["Bolo P (até 12 fatias)", "20 salgados", "20 brigadeiros"], campos: camposKitFesta(20, 20), temBolo: true },
-      { id: "kit3", tipo: "kit", nome: "Kit 3", pessoas: "Ideal para 15 pessoas", preco: 205, img: GAL + "flores-margaridas.jpg", inclui: ["Bolo M (16 fatias)", "30 salgados", "30 brigadeiros"], campos: camposKitFesta(30, 30), temBolo: true, destaque: "Mais pedido" },
-      { id: "kit4", tipo: "kit", nome: "Kit 4", pessoas: "Ideal para 20 pessoas", preco: 260, img: GAL + "rosas-douradas-50.jpg", inclui: ["Bolo 2 kg (20 fatias)", "40 salgados", "40 brigadeiros"], campos: camposKitFesta(40, 40), temBolo: true },
-      { id: "kit5", tipo: "kit", nome: "Kit 5", pessoas: "Ideal para 30 pessoas", preco: 390, img: GAL + "flores-15-anos.jpg", inclui: ["Bolo 3 kg (30 fatias)", "60 salgados", "60 brigadeiros"], campos: camposKitFesta(60, 60), temBolo: true },
+      { id: "kit1", tipo: "kit", bolo3d: { kg: 0.8 }, nome: "Kit 1", pessoas: "Ideal para até 8 pessoas", preco: 90, img: GAL + "romeu-confete-sensacao.jpg", inclui: ["Bolo PP (6 a 8 fatias)", "10 salgados", "10 brigadeiros"], campos: camposKitFesta(10, 10), temBolo: true },
+      { id: "kit2", tipo: "kit", bolo3d: { kg: 1.2 }, nome: "Kit 2", pessoas: "Ideal para 10 pessoas", preco: 130, img: GAL + "doce-de-leite-grid.jpg", inclui: ["Bolo P (até 12 fatias)", "20 salgados", "20 brigadeiros"], campos: camposKitFesta(20, 20), temBolo: true },
+      { id: "kit3", tipo: "kit", bolo3d: { kg: 1.5 }, nome: "Kit 3", pessoas: "Ideal para 15 pessoas", preco: 205, img: GAL + "flores-margaridas.jpg", inclui: ["Bolo M (16 fatias)", "30 salgados", "30 brigadeiros"], campos: camposKitFesta(30, 30), temBolo: true, destaque: "Mais pedido" },
+      { id: "kit4", tipo: "kit", bolo3d: { kg: 2 }, nome: "Kit 4", pessoas: "Ideal para 20 pessoas", preco: 260, img: GAL + "rosas-douradas-50.jpg", inclui: ["Bolo 2 kg (20 fatias)", "40 salgados", "40 brigadeiros"], campos: camposKitFesta(40, 40), temBolo: true },
+      { id: "kit5", tipo: "kit", bolo3d: { kg: 3 }, nome: "Kit 5", pessoas: "Ideal para 30 pessoas", preco: 390, img: GAL + "flores-15-anos.jpg", inclui: ["Bolo 3 kg (30 fatias)", "60 salgados", "60 brigadeiros"], campos: camposKitFesta(60, 60), temBolo: true },
     ],
   },
   {
@@ -91,9 +91,9 @@ const CATEGORIAS = [
     resumo: "Para comemorações pequenas, com doces personalizados no tema.",
     nota: "Os personalizados de papelaria são cobrados à parte e não estão inclusos no valor do kit.",
     itens: [
-      { id: "kit6", tipo: "kit", nome: "Kit 6", preco: 125, img: GAL + "fundo-do-mar.jpg", inclui: ["Bolo P (12 fatias)", "10 brigadeiros", "4 pirulitos"], campos: camposMesversario(10), temBolo: true },
-      { id: "kit7", tipo: "kit", nome: "Kit 7", preco: 210, img: GAL + "copa-brasil.jpg", inclui: ["Bolo 1,5 kg (até 16 fatias)", "20 brigadeiros", "4 cupcakes", "4 pirulitos"], campos: camposMesversario(20), temBolo: true },
-      { id: "kit8", tipo: "kit", nome: "Kit 8", preco: 275, img: GAL + "flores-pink.jpg", inclui: ["Bolo 2 kg (20 fatias)", "30 brigadeiros", "6 cupcakes", "6 pirulitos"], campos: camposMesversario(30), temBolo: true },
+      { id: "kit6", tipo: "kit", bolo3d: { kg: 1.2 }, extras3d: ["pirulito","pirulito","pirulito","pirulito"], nome: "Kit 6", preco: 125, img: GAL + "fundo-do-mar.jpg", inclui: ["Bolo P (12 fatias)", "10 brigadeiros", "4 pirulitos"], campos: camposMesversario(10), temBolo: true },
+      { id: "kit7", tipo: "kit", bolo3d: { kg: 1.5 }, extras3d: ["cupcake","pirulito","cupcake","pirulito","cupcake","pirulito","cupcake","pirulito"], nome: "Kit 7", preco: 210, img: GAL + "copa-brasil.jpg", inclui: ["Bolo 1,5 kg (até 16 fatias)", "20 brigadeiros", "4 cupcakes", "4 pirulitos"], campos: camposMesversario(20), temBolo: true },
+      { id: "kit8", tipo: "kit", bolo3d: { kg: 2 }, extras3d: ["cupcake","pirulito","cupcake","pirulito","cupcake","pirulito","cupcake","pirulito","cupcake","pirulito","cupcake","pirulito"], nome: "Kit 8", preco: 275, img: GAL + "flores-pink.jpg", inclui: ["Bolo 2 kg (20 fatias)", "30 brigadeiros", "6 cupcakes", "6 pirulitos"], campos: camposMesversario(30), temBolo: true },
     ],
   },
   {
@@ -232,6 +232,43 @@ const CATEGORIAS = [
     ],
   },
 ];
+
+/* ---------- Cores do visualizador 3D ---------- */
+const CORES_3D = {
+  massas: { Chocolate: "#5a3326", Baunilha: "#f1d79f", "Red Velvet": "#9e2330" },
+  massaPadrao: "#f1d79f",
+  recheios: {
+    "Bem casado": "#c49a6c", Chocolate: "#3f231a", "Chocolate Preto": "#3f231a", Ninho: "#f6edd8",
+    Morango: "#ee8fa0", Beijinho: "#fffaf2", "Romeu e Julieta": "#e9c08f", Crocante: "#a8703e",
+    "Ninho com Morango": "#f4c6cc", "Ninho com Nutella": "#7b4a30", "Ninho com Abacaxi": "#f3df86",
+  },
+  recheioPadrao: "#f3e6d6",
+  // decoração do topo de acordo com o recheio
+  topos: {
+    Morango: { tipo: "morango" }, "Ninho com Morango": { tipo: "morango" }, "Ninho com Abacaxi": { tipo: "abacaxi" },
+    "Romeu e Julieta": { tipo: "goiabada" }, Crocante: { tipo: "crocante" }, Beijinho: { tipo: "coco" },
+    "Ninho com Nutella": { tipo: "bolinha", cor: "#4a2a1c" }, Chocolate: { tipo: "bolinha", cor: "#3b2018" },
+    "Chocolate Preto": { tipo: "bolinha", cor: "#3b2018" }, Ninho: { tipo: "bolinha", cor: "#f3e8cd" },
+    "Bem casado": { tipo: "bolinha", cor: "#3b2018" },
+  },
+  doces: {
+    "Brigadeiro de Chocolate": { forma: "brigadeiro", cor: "#3b2018", granulado: true },
+    Ninho: { forma: "brigadeiro", cor: "#f3e8cd" },
+    "Surpresa de Uva": { forma: "brigadeiro", cor: "#a5d68f" },
+    "Bem Casado": { forma: "bemcasado", cor: "#3b2018", cor2: "#f3e8cd" },
+    "Beijinho de Coco": { forma: "beijinho", cor: "#fffaf2" },
+  },
+  salgados: {
+    "Coxinha de Frango": { forma: "coxinha", cor: "#d48f3c" },
+    "Bolinho de Queijo": { forma: "bolinha", cor: "#dda04a" },
+    "Pastelzinho de Queijo": { forma: "pastel", cor: "#e5b35a" },
+    "Pastelzinho de Carne": { forma: "pastel", cor: "#d9a24c" },
+  },
+  extras: {
+    cupcake: { forma: "cupcake", cor: "#f4b6c2", cor2: "#e0a2ae" },
+    pirulito: { forma: "pirulito", cor: "#4a2a1c", cor2: "#f5d7a1" },
+  },
+};
 
 const GALERIA = [
   { src: GAL + "copa-brasil.jpg", alt: "Caixa de brigadeiros personalizados com tema Brasil e futebol" },

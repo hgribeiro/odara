@@ -9,6 +9,10 @@ Visão do cliente apenas (sem login): o cliente monta o pedido no site e ele é 
   Brigadeiros (tradicionais, especiais e premium), Personalizados, Doces Finos e Salgados de Festa.
 - **Montagem de kits e bolos**: escolha de massa, recheios, sabores de salgados/brigadeiros e tema,
   respeitando os limites do cardápio (mín. 10 un. por sabor, 2 recheios, etc.).
+- **Construtor 3D** (three.js): ao montar bolos e kits, o cliente vê o bolo em 3D com uma fatia cortada
+  mostrando as camadas de massa e recheio, a decoração e os doces/salgados escolhidos ao redor.
+  Arraste para girar; botão "Ver por dentro / Fechar a fatia". No celular o 3D fica fixo no topo enquanto
+  a pessoa escolhe os sabores. Se o aparelho não suportar WebGL, aparece uma ilustração 2D.
 - **Bolo personalizado** com cálculo automático do preço (tamanho + acréscimo de Red Velvet/recheio especial).
 - **Quantidades mínimas** por produto (10, 15, 30 ou 4 unidades, conforme o cardápio).
 - **Carrinho** salvo no navegador.
@@ -35,6 +39,7 @@ Tudo que muda com frequência está em **`js/data.js`**:
 
 - `CONFIG` — número do WhatsApp que recebe os pedidos, Instagram, endereço, dados do Pix, dias de antecedência.
 - `CATEGORIAS` — produtos, preços, mínimos, sabores e fotos.
+- `CORES_3D` — cores de massas, recheios, doces e salgados no visualizador 3D.
 - `GALERIA` — fotos da galeria.
 
 Fotos ficam em `assets/img/produtos` e `assets/img/galeria`.
@@ -46,5 +51,7 @@ index.html          página
 css/styles.css      estilos (paleta do cardápio: rosé, cacau e dourado)
 js/data.js          dados da loja e do cardápio
 js/app.js           carrinho, montagem de itens, checkout e WhatsApp
+js/bolo3d.js        visualizador 3D do bolo/kits (carregado só ao abrir o construtor)
+js/vendor/          three.js r160 (MIT) incluído localmente
 assets/img/         fotos
 ```
